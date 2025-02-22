@@ -13,6 +13,8 @@ const loginSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+const API_BASE_URL = import.meta.env.VITE_API_URL 
+
 type LoginForm = z.infer<typeof loginSchema>;
 
 function Login() {
@@ -28,7 +30,7 @@ function Login() {
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      const response = await api.post("http://localhost:3000/auth/login", data);
+      const response = await api.post(`${API_BASE_URL}/auth/login`, data);
       login(response.data.token);
       toast.success("Welcome back!");
       navigate("/dashboard");

@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import api from "../lib/axios";
 import type { Flashcard } from "../types";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL 
+
 const convertToIST = (utcDate: string) => {
   const date = new Date(utcDate);
   const istOffset = 5.5 * 60 * 60 * 1000;
@@ -20,7 +22,7 @@ function Review() {
   const fetchNextCard = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get("http://localhost:3000/flashcards/next");
+      const response = await api.get(`${API_BASE_URL}/flashcards/next`);
       let { card, dueCount: count } = response.data;
 
       if (card && card._id) {
@@ -58,7 +60,7 @@ function Review() {
     }
 
     try {
-      await api.post(`http://localhost:3000/flashcards/${currentCard.id}/review`, { correct });
+      await api.post(`${API_BASE_URL}/flashcards/${currentCard.id}/review`, { correct });
       toast.success(correct ? "Great job!" : "Keep practicing!");
       setShowAnswer(false);
       fetchNextCard();

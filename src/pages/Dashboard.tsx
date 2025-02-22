@@ -16,6 +16,8 @@ const cardColors = [
   "bg-teal-500 dark:bg-teal-700",
 ];
 
+const API_BASE_URL = import.meta.env.VITE_API_URL 
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -96,7 +98,7 @@ function Dashboard() {
 
   const fetchFlashcards = async () => {
     try {
-      const response = await api.get("http://localhost:3000/flashcards");
+      const response = await api.get(`${API_BASE_URL}/flashcards`);
       setFlashcards(response.data);
     } catch (error) {
       toast.error("Failed to fetch flashcards");
@@ -107,10 +109,10 @@ function Dashboard() {
     e.preventDefault();
     try {
       if (editingCard) {
-        await api.put(`http://localhost:3000/flashcards/${editingCard._id}`, formData);
+        await api.put(`${API_BASE_URL}/flashcards/${editingCard._id}`, formData);
         toast.success("✨ Flashcard updated successfully!");
       } else {
-        const response = await api.post("http://localhost:3000/flashcards", formData);
+        const response = await api.post(`${API_BASE_URL}/flashcards`, formData);
         toast.success("🎉 New flashcard created!");
         setFlashcards((prev) => [...prev, response.data]);
       }
@@ -126,7 +128,7 @@ function Dashboard() {
   const handleDelete = async (_id: string) => {
     if (!window.confirm("🗑️ Are you sure you want to delete this flashcard?")) return;
     try {
-      await api.delete(`http://localhost:3000/flashcards/${_id}`);
+      await api.delete(`${API_BASE_URL}/flashcards/${_id}`);
       toast.success("🗑️ Flashcard deleted successfully");
       setFlashcards((prev) => prev.filter((card) => card._id !== _id));
     } catch (error) {

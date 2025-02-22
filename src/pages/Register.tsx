@@ -21,6 +21,8 @@ const registerSchema = z
     path: ["confirmPassword"],
   });
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL 
+
 type RegisterForm = z.infer<typeof registerSchema>;
 
 function Register() {
@@ -36,7 +38,7 @@ function Register() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      const response = await api.post("http://localhost:3000/auth/register", {
+      const response = await api.post(`${API_BASE_URL}/auth/register`, {
         name: data.name,
         email: data.email,
         password: data.password,
