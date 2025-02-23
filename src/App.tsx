@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgetPassword from './pages/ForgetPassword';
 import Dashboard from './pages/Dashboard';
 import Review from './pages/Review';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgetPassword />} />
             <Route path="/" element={<Home />} />
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>

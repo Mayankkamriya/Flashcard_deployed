@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
 import { useAuth } from "../contexts/AuthContext";
-import DarkModeToggle from "../components/DarkModeToggle";
+// import DarkModeToggle from "../components/DarkModeToggle";
 
 // Form validation schema
 const loginSchema = z.object({
