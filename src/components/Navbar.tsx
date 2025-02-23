@@ -28,10 +28,16 @@ function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/dashboard" className={`px-4 py-2 rounded-md transition-all duration-200 font-medium ${isActive("/dashboard") ? "bg-indigo-500 text-white" : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"}`}>
+          {/* <Link to="/dashboard" className={`px-4 py-2 rounded-md transition-all duration-200 font-medium ${isActive("/dashboard") ? "bg-indigo-500 text-white" : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"}`}>
             Dashboard
           </Link>
           <Link to="/review" className={`px-4 py-2 rounded-md transition-all duration-200 font-medium ${isActive("/review") ? "bg-indigo-500 text-white" : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"}`}>
+            Review Cards
+          </Link> */}
+          <Link to="/dashboard" className={`px-6 py-3 rounded-lg font-semibold shadow-lg transition ${isActive("/dashboard") ? "bg-gradient-to-r from-teal-400 to-blue-600 text-white hover:from-teal-500 hover:to-blue-700" : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800"}`}>
+            Dashboard
+          </Link>    
+          <Link to="/review" className={`px-6 py-3 rounded-lg font-semibold shadow-lg transition ${  isActive("/review") ? "bg-gradient-to-r from-teal-400 to-blue-600 text-white hover:from-teal-500 hover:to-blue-700" : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800" }`}>
             Review Cards
           </Link>
         </div>

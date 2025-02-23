@@ -32,7 +32,7 @@ const Home = () => {
                     🚀 
                 </div> */}
                 <div className="text-2xl font-black tracking-tight text-white dark:text-gray-300 bg-clip-text bg-gradient-to-r from-teal-400 to-blue-600 dark:from-cyan-300 dark:to-blue-500">
-                🚀  UltraFlash 1
+                🚀  UltraFlash
                 </div> 
 
                 {/* <div className="flex items-center space-x-2">
