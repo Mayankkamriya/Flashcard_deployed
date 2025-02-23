@@ -6,19 +6,20 @@ The **Flashcard App** is an interactive learning tool that helps users memorize 
 
 ## 🚀 Features
 
-✅ **Create Flashcards** - Add new flashcards with questions and answers.
 
-✅ **Spaced Repetition** - Uses the Leitner System for effective learning.
+✅ **Flashcard Management** - Add, update, delete, and review flashcards seamlessly.
 
-✅ **Progress Tracking** - View learning progress and review schedules.
+✅ **Spaced Repetition** - Optimize learning with the proven Leitner System.
 
-✅ **Flashcard Review Mode** - Test knowledge with interactive flashcards.
+✅ **JWT Authentication** - Secure user sessions and data. 
 
-✅ **Responsive Design** - Works on both desktop and mobile devices.
+✅ **Dark Mode** - User-friendly interface for any environment.
+
+✅ **Animated Transitions** - Smooth user experience with Framer Motion.
 
 ✅ **Data Storage** - Uses MongoDB (or Local Storage as a fallback) to save flashcards.
 
-✅ **Deployed Version Available** - Access the application online anytime.
+✅ **Deployed Infrastructure** - Frontend both Backend on Vercel.
 
 ## 🛠 Tech Stack
 
