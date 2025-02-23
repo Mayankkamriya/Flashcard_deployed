@@ -18,6 +18,22 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// Reset to the first flashcard when the user answers incorrectly
+router.get("/reset", auth, async (req, res) => {
+  try {
+    const firstCard = await Flashcard.findOne({
+      user: req.user._id,
+      nextReviewDate: { $lte: new Date() } // Only get due cards
+    }).sort({ createdAt: 1 });
+
+    if (!firstCard) return res.status(404).json({ message: "No due flashcards found." });
+
+    res.json({ card: firstCard });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // Get next flashcard for review
 router.get("/next", auth, async (req, res) => {
   try {

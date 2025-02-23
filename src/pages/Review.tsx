@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, ThumbsUp, ThumbsDown, CalendarDays, BoxIcon } from "lucide-react";
+import { CheckCircle, XCircle, Eye, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
 import type { Flashcard } from "../types";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const convertToIST = (utcDate: string) => {
   const date = new Date(utcDate);
@@ -18,6 +18,19 @@ function Review() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dueCount, setDueCount] = useState(0);
+
+  const fetchFirstCard = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get(`${API_BASE_URL}/flashcards/reset`);
+      setCurrentCard(response.data.card);
+      setDueCount(response.data.dueCount);
+    } catch (error) {
+      // toast.error("Failed to load the first card.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fetchNextCard = async () => {
     try {
@@ -40,10 +53,9 @@ function Review() {
       } else {
         setCurrentCard(null);
       }
-
       setDueCount(count);
     } catch (error) {
-      toast.error("Failed to fetch next card");
+      toast.error("Oops! Could not fetch the next card.");
     } finally {
       setIsLoading(false);
     }
@@ -60,73 +72,87 @@ function Review() {
     }
 
     try {
-      await api.post(`${API_BASE_URL}/flashcards/${currentCard.id}/review`, { correct });
-      toast.success(correct ? "Great job!" : "Keep practicing!");
-      setShowAnswer(false);
-      fetchNextCard();
+      if (correct) {
+        await api.post(`${API_BASE_URL}/flashcards/${currentCard.id}/review`, { correct });
+        toast.success("Great job! ⭐ Moving to next card...");
+        setShowAnswer(false);
+        setTimeout(fetchNextCard, 1000);
+      } else {
+        toast.error("Wrong answer! You cannot move to next card.");
+        setShowAnswer(false);
+
+      //   setTimeout(() => {
+      //     setShowAnswer(false);
+      // }, 1000); 
+        setTimeout(fetchFirstCard, 1000);
+      }
     } catch (error) {
-      toast.error("Failed to update card progress");
+      toast.error("Failed to update progress");
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh] bg-black">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-      </div>
-    );
-  }
-
-  if (!currentCard) {
-    return (
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl mx-auto text-center py-12 bg-black text-white">
-        <BoxIcon className="mx-auto h-12 w-12 text-white" />
-        <h3 className="mt-2 text-lg font-medium">No cards left</h3>
-        <p className="mt-1 text-gray-400">Great job! You've viewed all the cards.</p>
-      </motion.div>
-    );
-  }
-
   return (
-    <div className="max-w-2xl mx-auto bg-black text-white p-6 rounded-lg shadow-lg">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
-        <h1 className="text-3xl font-bold">Review Cards</h1>
-        <p className="mt-2">{dueCount} card{dueCount !== 1 ? "s" : ""} left to review today</p>
-      </motion.div>
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100 dark:bg-gradient-to-br dark:from-gray-900 dark:via-black dark:to-gray-800">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }} 
+        animate={{ opacity: 1, scale: 1 }} 
+        transition={{ duration: 1, ease: "easeInOut" }} 
+        className="max-w-2xl w-full bg-white dark:bg-black/50 dark:backdrop-blur-lg border border-gray-300 dark:border-gray-700 rounded-xl p-6 shadow-lg text-gray-900 dark:text-white"
+      >
+        <h1 className="text-4xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-600">
+          Flashcard Review
+        </h1>
+        <p className="text-center text-gray-600 dark:text-gray-400 mb-4">{dueCount} cards left for today</p>
 
-      <motion.div key={currentCard.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} className="card bg-black border border-gray-700 rounded-lg p-6">
-        <div className="min-h-[200px] flex items-center justify-center">
-          <h2 className="text-xl text-center">{currentCard.question}</h2>
-        </div>
-
-        <AnimatePresence mode="wait">
-          {showAnswer && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.3 }} className="border-t border-gray-700">
-              <div className="p-6">
-                <div className="min-h-[100px] flex items-center justify-center">
-                  <p className="text-center">{currentCard.answer}</p>
-                </div>
-              </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center min-h-[200px]">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity }}>
+              <RefreshCw className="w-12 h-12 text-gray-800 dark:text-white" />
             </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="px-6 py-4 border-t border-gray-700">
-          {!showAnswer ? (
-            <button onClick={() => setShowAnswer(true)} className="btn-primary w-full bg-white text-black py-2 rounded-lg hover:bg-gray-300">Show Answer</button>
-          ) : (
-            <div className="flex space-x-4">
-              <button onClick={() => handleResponse(false)} className="flex-1 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg">
-                <ThumbsDown className="w-5 h-5 mr-2" />
-                Got it Wrong
+          </div>
+        ) : !currentCard ? (
+          <div className="text-center p-6">
+            <p className="text-lg font-medium">🎉 You've completed all cards for today!</p>
+          </div>
+        ) : (
+          <motion.div 
+            key={currentCard.id} 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -10 }} 
+            transition={{ duration: 1, ease: "easeInOut" }} 
+            className="bg-gray-100 dark:bg-gray-900 p-6 rounded-lg shadow-md text-center"
+          >
+            <h2 className="text-2xl font-semibold mb-4">{currentCard.question}</h2>
+            <AnimatePresence mode="wait">
+              {showAnswer && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  exit={{ opacity: 0, y: -10 }} 
+                  transition={{ duration: 0.8, ease: "easeInOut" }} 
+                  className="mt-4 p-4 bg-gray-200 dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-700"
+                >
+                  <p className="text-lg">{currentCard.answer}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            {!showAnswer ? (
+              <button onClick={() => setShowAnswer(true)} className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                <Eye className="w-5 h-5" /> Show Answer
               </button>
-              <button onClick={() => handleResponse(true)} className="flex-1 flex items-center justify-center bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">
-                <ThumbsUp className="w-5 h-5 mr-2" />
-                Got it Right
-              </button>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className="flex gap-4 mt-6">
+                <button onClick={() => handleResponse(false)} className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                  <XCircle className="w-5 h-5" /> Got it Wrong
+                </button>
+                <button onClick={() => handleResponse(true)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+                  <CheckCircle className="w-5 h-5" /> Got it Right
+                </button>
+              </div>
+            )}
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );

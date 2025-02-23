@@ -13,7 +13,7 @@ const loginSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const API_BASE_URL = import.meta.env.VITE_API_URL 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 type LoginForm = z.infer<typeof loginSchema>;
 
@@ -42,44 +42,33 @@ function Login() {
   return (
     <div className="flex min-h-screen">
       {/* Left Side - Image Section */}
-      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-600 to-purple-600 items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 bg-gradient-to-r from-teal-500 to-blue-600 dark:from-gray-900 dark:to-gray-800 items-center justify-center p-12">
         <div className="text-center text-white space-y-6">
           <h1 className="text-4xl font-bold">Boost Your Learning</h1>
-          <p className="text-lg opacity-80">
-            Join thousands mastering new skills every day.
-          </p>
-          <img
-            src="/images/illustration.png"
-            
-            alt="Learning Illustration"
-            className="w-80"
-          />
+          <p className="text-lg opacity-80">Join thousands mastering new skills every day.</p>
+          <img src="/images/illustration.png" alt="Learning Illustration" className="w-80" />
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 sm:p-12 bg-gray-100 dark:bg-gray-900">
-        <div className="absolute top-4 right-4">
-          <DarkModeToggle />
-        </div>
+      <div className="flex items-center justify-center h-screen max-w-md w-full mx-auto p-4">
+        <div className="bg-gradient-to-r from-teal-500 to-blue-600 rounded-lg p-1">
+          <div className=" bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center">
+              Welcome Back
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-center">
+              Sign in to continue your journey.
+            </p>
 
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center">
-            Welcome Back
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-center">
-            Sign in to continue your journey.
-          </p>
-
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <div className="space-y-4">
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {/* Email Field */}
               <div>
                 <label htmlFor="email" className="text-gray-700 dark:text-gray-300">
                   Email Address
                 </label>
                 <input
-                  {...register("email")}
+                  {...register("email", { required: "Email is required" })}
                   type="email"
                   id="email"
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -96,7 +85,7 @@ function Login() {
                   Password
                 </label>
                 <input
-                  {...register("password")}
+                  {...register("password", { required: "Password is required" })}
                   type="password"
                   id="password"
                   className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -106,26 +95,29 @@ function Login() {
                   <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
                 )}
               </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white py-3 rounded-lg font-semibold transition duration-300 disabled:opacity-50"
+              >
+                {isSubmitting ? "Signing in..." : "Sign In"}
+              </button>
+            </form>
+
+            {/* Forgot Password & Signup Link */}
+            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+              <Link to="/forgot-password" className="hover:underline">
+                Forgot password?
+              </Link>
+              <Link
+                to="/register"
+                className="bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 transition duration-300 font-semibold"
+              >
+                Create an account
+              </Link>
             </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition"
-            >
-              {isSubmitting ? "Signing in..." : "Sign In"}
-            </button>
-          </form>
-
-          {/* Forgot Password & Signup Link */}
-          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <Link to="/forgot-password" className="hover:text-indigo-500">
-              Forgot password?
-            </Link>
-            <Link to="/register" className="hover:text-indigo-500">
-              Create an account
-            </Link>
           </div>
         </div>
       </div>
