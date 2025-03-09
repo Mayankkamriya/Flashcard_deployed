@@ -43,7 +43,7 @@ userSchema.pre("save", async function (next) {
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  console.log("Incoming Password:", candidatePassword);
+  // console.log("Incoming Password:", candidatePassword);
   console.log("Hashed Password in DB:", this.password);
 
   try {

@@ -23,9 +23,9 @@ The **Flashcard App** is an interactive learning tool that helps users memorize 
 
 ## 🛠 Tech Stack
 
-- **Frontend:**: React, Tailwind CSS
+- **Frontend:** React, Tailwind CSS
 
-- **Backend:**: Node.js, Express.js
+- **Backend:** Node.js, Express.js
 
 - **Database:** MongoDB (or Local Storage as fallback)
 
@@ -77,3 +77,16 @@ The project is deployed online. You can access it here:
 🤝 Contribution
 
 Contributions are welcome! Feel free to fork this repository and submit a pull request with improvements.
+
+---
+
+## 👨‍💻 **Developer Details:**
+
+**Mayank Kamriya**  
+B.B.A. - Vikram University  
+🌐 [LinkedIn](https://www.linkedin.com/in/mayank-kamriya) | 📧 mayankkamriya305@gmail.com
+📞 +91 8253038815
+
+---
+
+> Made with ❤️ by Mayank Kamriya
